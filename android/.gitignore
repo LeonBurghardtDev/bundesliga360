@@ -1,13 +1,23 @@
-gradle-wrapper.jar
-/.gradle
-/captures/
-/gradlew
-/gradlew.bat
-/local.properties
-GeneratedPluginRegistrant.java
+# Flutter/Dart related files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.idea/
+.vscode/
+*.iml
+*.log
 
-# Remember to never publicly share your keystore.
-# See https://flutter.dev/docs/deployment/android#reference-the-keystore-from-the-app
-key.properties
-**/*.keystore
-**/*.jks
+# Android related files
+**/build/
+**/captures/
+**/gradle/
+**/local.properties
+**/gradlew
+**/gradlew.bat
+**/*.iml
+**/*.log
+
+# Exclude all platform-specific files and directories except Android
+**/*/*/
+!**/android/
