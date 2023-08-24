@@ -1,30 +1,24 @@
-# CryptoCheck
+# Bundesliga kompakt
 
-CryptoCheck is a Flutter app that allows users to check the current price and historical data of various cryptocurrencies.
+Experience the excitement of Bundesliga with my app. Get updates on matches, standings, top scorers, and news. Never miss a moment of your favorite teams' action, whether it's on the field or off. Stay connected with all things Bundesliga in one convenient place.
 
 ## Features
 
-- View a list of cryptocurrencies with their names, icons, and current prices.
-- Search for specific cryptocurrencies by name.
-- Sort the list of cryptocurrencies by price in ascending or descending order.
-- View detailed information about a specific cryptocurrency, including its historical price data for different durations.
+- Stay up-to-date with the live Bundesliga standings.
+- Access comprehensive match results, including past, current, and upcoming fixtures.
+- Stay informed with the latest news from the German Bundesliga.
+- Keep track of the current leading goal scorers in the league.
 
-## Usage
+## How it works
 
-- When the app starts, it fetches data from the Coingecko API to get a list of the top 50 cryptocurrencies by market cap and displays them on the home screen.
-- When the app starts, it fetches data from the Coingecko API to get a list of the top 50 cryptocurrencies by market cap and displays them on the home screen.
-- Tap the sort icon in the app bar to toggle between sorting the list in ascending and descending order based on the cryptocurrency's price.
-- Tap on a cryptocurrency in the list to view detailed information about it, including its name, current price, and a line chart showing its historical price data for different durations (12 months, 6 months, 1 month, and 24 hours).
-- In the detail screen, you can also switch between different durations for the historical price chart by tapping on the corresponding buttons.
+- The application is built using Flutter. When loading any of the four pages, the respective information is fetched from the OpenLigaDB API, processed, and displayed.
+
 ## Screenshots
-
-![1](https://i.ibb.co/QP3Q94d/Screenshot-1690116031.png)
-![2](https://i.ibb.co/HT1HCCg/Screenshot-1690116045.png)
-![3](https://i.ibb.co/tKfRj9B/Screenshot-1690116053.png)
-![4](https://i.ibb.co/kqy7nsG/Screenshot-1690116056.png)
+<a href="https://postimg.cc/5Y02JnST" target="_blank"><img src="https://i.postimg.cc/5Y02JnST/Screenshot-2023-08-15-19-16-03-394-com-example-german-football-app.jpg" alt="Screenshot-2023-08-15-19-16-03-394-com-example-german-football-app"/></a> <a href="https://postimg.cc/FfGHw230" target="_blank"><img src="https://i.postimg.cc/FfGHw230/Screenshot-2023-08-15-19-16-06-058-com-example-german-football-app.jpg" alt="Screenshot-2023-08-15-19-16-06-058-com-example-german-football-app"/></a> <a href="https://postimg.cc/HchskXSx" target="_blank"><img src="https://i.postimg.cc/HchskXSx/Screenshot-2023-08-15-19-16-08-190-com-example-german-football-app.jpg" alt="Screenshot-2023-08-15-19-16-08-190-com-example-german-football-app"/></a> 
 
 ## Credits 
-- This app uses the free Coingecko API to fetch cryptocurrency data
+- This app uses the free [OpenLigaDB](https://www.openligadb.de/) database and the free [Kicker-Rss-Feed](https://www.kicker.de/mit_rss_immer_informiert-371919/artikel)
+
 
 ## License 
 
