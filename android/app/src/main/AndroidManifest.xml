@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="BL-kompakt"
+        android:label="Bundesliga360"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

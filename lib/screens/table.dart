@@ -120,22 +120,34 @@ class _TableScreenState extends State<TableScreen> {
                   TableCell(child: Text('')),
                   TableCell(
                       child: Center(
-                          child: Text('Sp', style: TextStyle(fontSize: 11)))),
+                          child: Text('Sp',
+                              style: TextStyle(
+                                  fontSize: 11, fontWeight: FontWeight.bold)))),
                   TableCell(
                       child: Center(
-                          child: Text('S', style: TextStyle(fontSize: 11)))),
+                          child: Text('S',
+                              style: TextStyle(
+                                  fontSize: 11, fontWeight: FontWeight.bold)))),
                   TableCell(
                       child: Center(
-                          child: Text('U', style: TextStyle(fontSize: 11)))),
+                          child: Text('U',
+                              style: TextStyle(
+                                  fontSize: 11, fontWeight: FontWeight.bold)))),
                   TableCell(
                       child: Center(
-                          child: Text('D', style: TextStyle(fontSize: 11)))),
+                          child: Text('D',
+                              style: TextStyle(
+                                  fontSize: 11, fontWeight: FontWeight.bold)))),
                   TableCell(
                       child: Center(
-                          child: Text('Diff', style: TextStyle(fontSize: 11)))),
+                          child: Text('Diff',
+                              style: TextStyle(
+                                  fontSize: 11, fontWeight: FontWeight.bold)))),
                   TableCell(
                       child: Center(
-                          child: Text('Pkt', style: TextStyle(fontSize: 11)))),
+                          child: Text('Pkt',
+                              style: TextStyle(
+                                  fontSize: 11, fontWeight: FontWeight.bold)))),
                 ],
               ),
               // Loop through each team data and create a TableRow for each team
@@ -155,7 +167,9 @@ class _TableScreenState extends State<TableScreen> {
                     buildCellWithLeftBorder(
                       int.parse(rank),
                       getRankBackgroundColor(int.parse(rank)),
-                      Text('$rank', style: TextStyle(fontSize: 11)),
+                      Text('$rank',
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.bold)),
                     ),
                     TableCell(
                       child: Container(
@@ -165,7 +179,10 @@ class _TableScreenState extends State<TableScreen> {
                           children: [
                             _buildImageWidget(icon),
                             SizedBox(width: 8),
-                            Text(teamName, style: TextStyle(fontSize: 11)),
+                            Text(teamName,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal)),
                           ],
                         ),
                       ),
@@ -175,7 +192,9 @@ class _TableScreenState extends State<TableScreen> {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Center(
                             child: Text('$matchesPlayed',
-                                style: TextStyle(fontSize: 11))),
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.normal))),
                       ),
                     ),
                     TableCell(
@@ -183,7 +202,9 @@ class _TableScreenState extends State<TableScreen> {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Center(
                             child: Text('$matchesWon',
-                                style: TextStyle(fontSize: 11))),
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.normal))),
                       ),
                     ),
                     TableCell(
@@ -191,7 +212,9 @@ class _TableScreenState extends State<TableScreen> {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Center(
                             child: Text('$matchesDrawn',
-                                style: TextStyle(fontSize: 11))),
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.normal))),
                       ),
                     ),
                     TableCell(
@@ -199,7 +222,9 @@ class _TableScreenState extends State<TableScreen> {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Center(
                             child: Text('$matchesLost',
-                                style: TextStyle(fontSize: 11))),
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.normal))),
                       ),
                     ),
                     TableCell(
@@ -207,7 +232,9 @@ class _TableScreenState extends State<TableScreen> {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Center(
                             child: Text('$goalDiff',
-                                style: TextStyle(fontSize: 11))),
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.normal))),
                       ),
                     ),
                     TableCell(
@@ -215,7 +242,9 @@ class _TableScreenState extends State<TableScreen> {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Center(
                             child: Text('$points',
-                                style: TextStyle(fontSize: 11))),
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.normal))),
                       ),
                     ),
                   ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart'; // Import the flutter_svg package
+import 'package:german_football_app/screens/home.dart';
 import 'layout.dart';
 
 void main() {
@@ -10,10 +11,10 @@ class BundesligaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system, // Use system theme mode (light/dark)
+      themeMode: ThemeMode.light, // Use system theme mode (light/dark)
       theme: ThemeData.light(), // Light theme
-      darkTheme: ThemeData.dark(), // Dark theme
-      home: HomeScreen(),
+      darkTheme: ThemeData.light(), // Dark theme
+      home: Layout(),
     );
   }
 }
