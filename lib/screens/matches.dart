@@ -131,8 +131,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
       return const Icon(Icons.error);
     }
   }
-
-  Widget _buildMatchRow(Map<String, dynamic> matchData) {
+  Widget _buildMatchRow(Map<String, dynamic> matchData, int currentMinute) {
     final date = matchData['matchDateTime'];
     final homeTeam = matchData['team1']['teamName'];
     final awayTeam = matchData['team2']['teamName'];
@@ -155,68 +154,80 @@ class _MatchesScreenState extends State<MatchesScreen> {
     final awayTeamIconUrl = matchData['team2']['teamIconUrl'];
 
     return GestureDetector(
-        onTap: () {
-          _showMatchDetailDialog(matchData['matchID'].toString());
-        },
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 3,
-                blurRadius: 5,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  _buildImageWidget(homeTeamIconUrl),
-                  const SizedBox(height: 4),
-                ],
-              ),
-              const SizedBox(
-                  width: 8), // Add spacing between team icon and text
-              Column(
-                children: [
-                  Text(
-                    '$homeTeam ',
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  Text(
-                    matchResult,
-                    style: matchData['matchResults'].isEmpty
-                        ? TextStyle(fontSize: 14, color: textColor)
-                        : TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: textColor),
-                  ),
-                  Text(
-                    ' $awayTeam',
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                  width: 8), // Add spacing between text and team icon
-              Column(
-                children: [
-                  _buildImageWidget(awayTeamIconUrl),
-                  const SizedBox(height: 4),
-                ],
-              ),
-            ],
-          ),
-        ));
+      onTap: () {
+        _showMatchDetailDialog(matchData['matchID'].toString(),currentMinute);
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 3,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    _buildImageWidget(homeTeamIconUrl),
+                    const SizedBox(height: 4),
+                  ],
+                ),
+                const SizedBox(
+                    width: 8), // Add spacing between team icon and text
+                Column(
+                  children: [
+                    Text(
+                      '$homeTeam ',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    if (currentMinute != -1)
+                      Text(
+                        '$currentMinute\'',
+                        style: TextStyle(fontSize: 14, color: textColor, fontWeight: FontWeight.bold),
+                      ),                    Text(
+                      matchResult,
+                      style: matchData['matchResults'].isEmpty
+                          ? TextStyle(fontSize: 14, color: textColor)
+                          : TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: textColor),
+                    ),
+
+                    Text(
+                      ' $awayTeam',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                    width: 8), // Add spacing between text and team icon
+                Column(
+                  children: [
+                    _buildImageWidget(awayTeamIconUrl),
+                    const SizedBox(height: 4),
+                  ],
+                ),
+              ],
+            ),
+
+          ],
+        ),
+      ),
+    );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +248,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
 
               // Calculate time difference in minutes
               final matchDateTime = DateTime.parse(date);
-              final currentTime = DateTime.now();
+              final currentTime = DateTime.now().add(const Duration(hours: 2));
               final timeDifference =
                   matchDateTime.difference(currentTime).inMinutes;
 
@@ -247,6 +258,16 @@ class _MatchesScreenState extends State<MatchesScreen> {
                 textColor = Colors.red;
               }
 
+              int currentMinute = -1;
+              if (timeDifference.abs() < 110){
+                if(timeDifference.abs() < 45){
+                  currentMinute =  timeDifference.abs();
+                }else if(timeDifference.abs() > 47&& timeDifference.abs() < 60){
+                  currentMinute =  45;
+                }else if(timeDifference.abs() > 60 && timeDifference.abs() < 115){
+                  currentMinute =  timeDifference.abs() - 17;
+                }
+}
               final homeTeamIconUrl = matchData['team1']['teamIconUrl'];
               final awayTeamIconUrl = matchData['team2']['teamIconUrl'];
 
@@ -307,9 +328,9 @@ class _MatchesScreenState extends State<MatchesScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: _buildMatchRow(matchData),
+                      child: _buildMatchRow(matchData, currentMinute),
                     ),
-                  if (!sameGameTimeAsPrevious) _buildMatchRow(matchData),
+                  if (!sameGameTimeAsPrevious) _buildMatchRow(matchData, currentMinute),
                 ],
               );
             },
@@ -319,7 +340,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
     );
   }
 
-  void _showMatchDetailDialog(String matchId) async {
+  void _showMatchDetailDialog(String matchId,int currentMinute) async {
     final response = await http.get(
       Uri.parse('https://api.openligadb.de/getmatchdata/$matchId'),
     );
@@ -430,6 +451,11 @@ class _MatchesScreenState extends State<MatchesScreen> {
 
         fulltime_result = '$formattedDateTime';
       }
+      var TextColor= Colors.black;
+      if(currentMinute != -1){
+        TextColor = Colors.red;
+      }
+
 
       showDialog(
         context: context,
@@ -496,19 +522,24 @@ class _MatchesScreenState extends State<MatchesScreen> {
                         Text(
                           fulltime_result,
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18, fontWeight: FontWeight.bold, color: TextColor),
                         ),
-                        if (matchData['matchResults'].length > 0 &&
-                            matchData['matchResults'][0]['pointsTeam1'] != null)
+                        if (currentMinute == -1)
                           Text(
                             halftime_result,
                             style: TextStyle(
                                 fontSize: 12, fontWeight: FontWeight.bold),
                           ),
+                        if (currentMinute != -1)
+                          Text(
+                            ' $currentMinute\'',
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.bold, color: TextColor),
+                          ),
+
                       ],
                     ),
                   ),
-
                   const Divider(
                     color: Colors.black,
                   ),

@@ -142,6 +142,15 @@ class _LayoutState extends State<Layout> {
                 },
               ),
               ListTile(
+                leading: Icon(Icons.money),
+                title: Text('Spenden'),
+                onTap: () {
+                  _openInAppBrowser(
+                      "https://www.paypal.me/leontr3x",
+                      "Spenden");
+                },
+              ),
+              ListTile(
                 leading: Icon(Icons.info),
                 title: Text('Fehler melden'),
                 onTap: () async {

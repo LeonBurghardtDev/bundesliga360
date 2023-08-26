@@ -93,22 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
             .sort((a, b) => a['matchDateTime'].compareTo(b['matchDateTime']));
 
         if (matches.isNotEmpty) {
-          final nextMatchDateTime =
-              DateTime.parse(matches.first['matchDateTime']);
-          final currentTime = DateTime.now();
-          final timeDifference = nextMatchDateTime.difference(currentTime);
 
-          if (timeDifference < Duration.zero) {
-            setState(() {
-              nextMatchCountdown = '...';
-            });
-            _fetchMatchesData(currentMatchday + 1);
-            return;
-          }
           setState(() {
-            nextMatchCountdown =
-                '${timeDifference.inDays} days, ${timeDifference.inHours % 24} hours, ${timeDifference.inMinutes % 60} minutes, ${timeDifference.inSeconds % 60} seconds';
-            matchesData = matches;
+             matchesData = matches;
             _isLoading = false;
             _startCountdownTimer();
           });
@@ -122,21 +109,26 @@ class _HomeScreenState extends State<HomeScreen> {
           'Bitte überprüfe deine Internetverbindung und versuche es erneut.');
     }
   }
-
   void _startCountdownTimer() {
     if (matchesData.isEmpty) return;
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
+        final currentTime = DateTime.now();
+        var nextGameIndex = -1;
+        Duration shortestTimeDifference = Duration(days: 365); // Initialize with a large value
+
         for (var match in matchesData) {
           final matchDateTime = DateTime.parse(match['matchDateTime']);
-          final currentTime = DateTime.now();
           final timeDifference = matchDateTime.difference(currentTime);
 
-          if (timeDifference < Duration(seconds: 1) &&
-              timeDifference > Duration(seconds: -105 * 60)) {
-            // Game is currently running, update standings and slide index
-            currentSlideIndex = matchesData.indexOf(match);
+          if (timeDifference > Duration.zero && timeDifference < shortestTimeDifference) {
+            nextGameIndex = matchesData.indexOf(match);
+            shortestTimeDifference = timeDifference;
           }
+        }
+
+        if (nextGameIndex != -1) {
+          currentSlideIndex = nextGameIndex;
         }
       });
     });
@@ -146,28 +138,28 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return _isLoading
         ? Center(
-            child: CircularProgressIndicator(),
-          )
+      child: CircularProgressIndicator(),
+    )
         : Scaffold(
-            body: SingleChildScrollView(
-              // Wrap the Column with SingleChildScrollView
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20),
-                    Center(
-                      child: _buildMatchInfo(matchesData[currentSlideIndex]),
-                    ),
-                    SizedBox(height: 20),
-                    _buildTopNewsSection(),
-                    // ... (previous code)
-                  ],
-                ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(height: 20),
+              Center(
+                child: _buildMatchInfo(matchesData[currentSlideIndex]),
               ),
-            ),
-          );
+              SizedBox(height: 20),
+              _buildTopNewsSection(),
+              // ... (previous code)
+            ],
+          ),
+        ),
+      ),
+    );
   }
+
 
   Widget _buildTopNewsSection() {
     if (topNews.isEmpty) {
@@ -305,7 +297,15 @@ class _HomeScreenState extends State<HomeScreen> {
     final matchResult = matchData['matchResults'].isEmpty
         ? '${DateTime.parse(matchData['matchDateTime']).day.toString() + '.' + DateTime.parse(matchData['matchDateTime']).month.toString() + '.' + DateTime.parse(matchData['matchDateTime']).year.toString() + ' - ' + DateTime.parse(matchData['matchDateTime']).hour.toString() + ':' + DateTime.parse(matchData['matchDateTime']).minute.toString() + ' Uhr'}'
         : '${matchData['matchResults'][1]['pointsTeam1']} : ${matchData['matchResults'][1]['pointsTeam2']}';
-
+    final title = matchData['matchResults'].isEmpty
+        ? 'Nächstes Bundesliga-Spiel'
+        : 'Die Bundesliga ist LIVE!';
+    final bool isGameLive = matchData['matchResults'].isEmpty
+              ? false
+              : true;
+    Color titleColor = matchData['matchResults'].isEmpty
+        ? Colors.black
+        : Colors.red;
     final homeTeamIconUrl = matchData['team1']['teamIconUrl'];
     final awayTeamIconUrl = matchData['team2']['teamIconUrl'];
 
@@ -327,44 +327,52 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           Text(
-            'Nächste Bundesliga-Spiel',
+            title,
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           SizedBox(width: 26),
-          if (matchData['matchResults'].isEmpty ||
-              matchData['matchResults'][1]['pointsTeam1'] == null ||
-              matchData['matchResults'][1]['pointsTeam2'] == null)
+          if (!isGameLive)
             CountdownClock(
               matchesData: matchesData,
               currentSlideIndex: currentSlideIndex,
             ),
           SizedBox(width: 26),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.network(homeTeamIconUrl, width: 48, height: 48),
-              SizedBox(width: 8),
-              Text(
-                homeTeam,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(width: 8),
-              Text(
-                'gegen',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(width: 8),
-              Text(
-                awayTeam,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Image.network(awayTeamIconUrl, width: 48, height: 48),
-              SizedBox(width: 8),
-            ],
+          Container(
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width), // Set your desired maxWidth
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.network(homeTeamIconUrl, width: 48, height: 48),
+                SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    homeTeam,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'gegen',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    awayTeam,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Image.network(awayTeamIconUrl, width: 48, height: 48),
+                SizedBox(width: 8),
+              ],
+            ),
           ),
           Text(
             matchResult,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: titleColor),
           ),
           // Add the standings slideshow here
         ],
