@@ -1,4 +1,4 @@
-package com.example.german_football_app
+package xyz.tr3x.bundesliga360
 
 import io.flutter.embedding.android.FlutterActivity
 

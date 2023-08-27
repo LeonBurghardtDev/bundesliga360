@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart'; // Import the flutter_svg package
-import 'package:german_football_app/screens/home.dart';
+import 'package:bundesliga360/screens/home.dart';
 import 'layout.dart';
 
 void main() {
